@@ -25,7 +25,8 @@ module.exports = function (grunt) {
                 src: [
                     'src/libkeystone<%= lib.suffix %>.out.js',
                     'src/keystone-wrapper.js',
-                    'src/keystone-constants.js'
+                    'src/keystone-constants.js',
+                    'src/exporting.js',
                 ],
                 dest: 'dist/keystone<%= lib.suffix %>.min.js'
             }

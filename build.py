@@ -15,7 +15,13 @@ EXPORTED_FUNCTIONS = [
     '_ks_strerror',
     '_ks_errno',
     '_ks_arch_supported',
-    '_ks_version'
+    '_ks_version',
+    '_malloc',
+    '_free',
+    'ccall',
+    'setValue',
+    'getValue',
+    'stringToUTF8',
 ]
 
 EXPORTED_CONSTANTS = [
@@ -44,8 +50,7 @@ def generateConstants():
 
 def compileKeystone(targets):
     # CMake
-    cmd = 'cmake'
-    cmd += os.path.expandvars(' -DCMAKE_TOOLCHAIN_FILE=$EMSCRIPTEN/cmake/Modules/Platform/Emscripten.cmake')
+    cmd = 'emcmake cmake'
     cmd += ' -DCMAKE_BUILD_TYPE=Release'
     cmd += ' -DBUILD_SHARED_LIBS=OFF'
     cmd += ' -DCMAKE_CXX_FLAGS="-Os"'
@@ -58,20 +63,20 @@ def compileKeystone(targets):
         cmd += ' -G \"MinGW Makefiles\"'
     if os.name == 'posix':
         cmd += ' -G \"Unix Makefiles\"'
-    cmd += ' keystone/CMakeLists.txt'
+    os.chdir('keystone')
+    print(cmd)
     os.system(cmd)
 
     # MinGW (Windows) or Make (Linux/Unix)
-    os.chdir('keystone')
     if os.name == 'nt':
         os.system('mingw32-make')
     if os.name == 'posix':
-        os.system('make')
+        os.system('emmake make')
     os.chdir('..')
 
     # Compile static library to JavaScript
-    cmd = os.path.expandvars('$EMSCRIPTEN/emcc')
-    cmd += ' -Os --memory-init-file 0'
+    cmd = os.path.expandvars('emcc')
+    cmd += ' -Os -sWASM=0'
     cmd += ' keystone/llvm/lib/libkeystone.a'
     cmd += ' -s EXPORTED_FUNCTIONS=\"[\''+ '\', \''.join(EXPORTED_FUNCTIONS) +'\']\"'
     cmd += ' -s MODULARIZE=1'
@@ -80,6 +85,8 @@ def compileKeystone(targets):
         cmd += ' -o src/libkeystone-%s.out.js' % '-'.join(targets).lower()
     else:
         cmd += ' -o src/libkeystone.out.js'
+
+    print(cmd)
     os.system(cmd)
 
 
@@ -93,5 +100,5 @@ if __name__ == "__main__":
         generateConstants()
         compileKeystone(targets)
     else:
-        print "Your operating system is not supported by this script:"
-        print "Please, use Emscripten to compile Keystone manually to src/libkeystone.out.js"
+        print("Your operating system is not supported by this script:")
+        print("Please, use Emscripten to compile Keystone manually to src/libkeystone.out.js")
