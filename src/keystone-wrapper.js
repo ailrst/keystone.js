@@ -5,8 +5,9 @@
 
 // Emscripten demodularize
 
-var nks = (new MKeystone()).then((MKeystone) => { return {
+var MKeystone = await new MKeystone();
 
+var ks = {
     version: function() {
         major_ptr = MKeystone._malloc(4);
         minor_ptr = MKeystone._malloc(4);
@@ -127,5 +128,5 @@ var nks = (new MKeystone()).then((MKeystone) => { return {
             throw error;
         }
     },
-};}
-);
+};
+

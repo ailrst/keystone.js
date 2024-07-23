@@ -151,7 +151,7 @@ pop   rbx;
 
                     <h2>Installation</h2>
                     <p>To use the Keystone.js in your web application, download and include it with:</p>
-                    <p><pre><code>&lt;script src="keystone.min.js"&gt;&lt;/script&gt;</code></pre></p>
+                    <p><pre><code>&lt;script src="keystone.min.js" type="module"&gt;&lt;/script&gt;</code></pre></p>
                     <p>or install it through the Bower command:</p>
                     <p><pre><code>bower install keystonejs</code></pre></p>
                 </div>
@@ -159,6 +159,8 @@ pop   rbx;
                     <h2>Tutorial</h2>
                     <p>
 <pre><code class="javascript">// Input: Assembly
+import ks from "./dist/keystone.min.js"
+
 var assembly = `
   inc   rax;
   call  0x10040;
@@ -207,10 +209,13 @@ a.close();</code></pre>
         <script src="externals/download.js"></script>
 
         <!-- KeystoneJS -->
-        <script src="dist/keystone.min.js"></script>
+        <script src="dist/keystone.min.js" type="module"></script>
 
         <!-- Simple demo of KeystoneJS -->
-        <script>
+        <script type="module">
+
+            import ks from "./dist/keystone.min.js"
+
             // Highlight.JS
             hljs.initHighlightingOnLoad();
 

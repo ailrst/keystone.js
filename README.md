@@ -8,7 +8,7 @@ Port of the [Keystone](https://github.com/keystone-engine/keystone) assembler fr
 ## Installation
 To add Keystone.js to your web application, include it with:
 ```html
-<script src="keystone.min.js"></script>
+<script src="keystone.min.js" type="module"></script>
 ```
 or install it with the Bower command:
 ```bash
@@ -17,6 +17,8 @@ bower install keystonejs
 
 ## Usage                                                      
 ```javascript
+import ks from "./dist/keystone.min.js"
+
 // Input: Assembly
 var assembly = `
   inc   rax;
@@ -46,6 +48,8 @@ a.close();
 To build the Keystone.js library, clone the *master* branch of this repository, and do the following:
 
 1. Initialize the original Keystone submodule: `git submodule update --init`.
+
+    - optionally update to more most version, via `cd keystone && git checkout master`
 
 2. Install the latest [Python 2.x (64-bit)](https://www.python.org/downloads/), [CMake](http://www.cmake.org/download/) and the [Emscripten SDK](http://kripken.github.io/emscripten-site/docs/getting_started/downloads.html). Follow the respective instructions and make sure all environment variables are configured correctly. Under Windows [MinGW](http://www.mingw.org/) (specifically *mingw32-make*) is required.
 

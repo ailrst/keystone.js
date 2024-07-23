@@ -63,11 +63,11 @@ def compileKeystone(targets):
         cmd += ' -G \"MinGW Makefiles\"'
     if os.name == 'posix':
         cmd += ' -G \"Unix Makefiles\"'
-    cmd += ' keystone/CMakeLists.txt'
+    #cmd += ' keystone/CMakeLists.txt'
+    os.chdir('keystone')
     print(cmd)
     os.system(cmd)
 
-    os.chdir('keystone')
     # MinGW (Windows) or Make (Linux/Unix)
     if os.name == 'nt':
         os.system('mingw32-make')
@@ -77,13 +77,11 @@ def compileKeystone(targets):
 
     # Compile static library to JavaScript
     cmd = os.path.expandvars('emcc')
-    cmd += " -s ALLOW_MEMORY_GROWTH=1"
     cmd += ' -Os -sWASM=0'
     cmd += ' keystone/llvm/lib/libkeystone.a'
     cmd += ' -s EXPORTED_FUNCTIONS=\"[\''+ '\', \''.join(EXPORTED_FUNCTIONS) +'\']\"'
-#    cmd += ' -s MODULARIZE=1'
+    cmd += ' -s MODULARIZE=1'
     cmd += ' -s EXPORT_NAME="\'MKeystone\'"'
-    cmd += " -s ABORTING_MALLOC"
     if targets:
         cmd += ' -o src/libkeystone-%s.out.js' % '-'.join(targets).lower()
     else:
