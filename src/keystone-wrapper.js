@@ -1,12 +1,12 @@
 /**
- * (c) 2016-2017 Keystone.JS
+ * (c) 2016-2017 eystone.JS
  * Wrapper made by Alexandro Sanchez Bach.
  */
 
 // Emscripten demodularize
-var MKeystone = new MKeystone();
 
-var ks = {
+var nks = (new MKeystone()).then((MKeystone) => { return {
+
     version: function() {
         major_ptr = MKeystone._malloc(4);
         minor_ptr = MKeystone._malloc(4);
@@ -20,12 +20,12 @@ var ks = {
     },
 
     arch_supported: function(arch) {
-        var ret = MKeystone.ccall('ks_arch_supported', 'number', ['number'], [arch]);
+        var ret = MKeystone._ks_arch_supported(arch);
         return ret;
     },
 
     strerror: function(code) {
-        var ret = MKeystone.ccall('ks_strerror', 'string', ['number'], [code]);
+        var ret = MKeystone._ks_strerror(code);
         return ret;
     },
 
@@ -48,7 +48,7 @@ var ks = {
                 [handle, option, value]
             );
             if (ret != ks.ERR_OK) {
-                var error = 'Keystone.js: Function ks_option failed with code ' + ret + ':\n' + ks.strerror(ret);
+                var error = 'Keystone.js: Function ks_option failed with code ' + ret + ':\n' + MKeystone._ks_strerror(ret);
                 throw error;
             }
         }
@@ -109,7 +109,7 @@ var ks = {
             var handle = MKeystone.getValue(this.handle_ptr, '*');
             var ret = MKeystone.ccall('ks_close', 'number', ['pointer'], [handle]);
             if (ret != ks.ERR_OK) {
-                var error = 'Keystone.js: Function ks_close failed with code ' + ret + ':\n' + ks.strerror(ret);
+                var error = 'Keystone.js: Function ks_close failed with code ' + ret + ':\n' + MKeystone._ks_strerror(ret);
                 throw error;
             }
             MKeystone._free(this.handle_ptr);
@@ -123,8 +123,9 @@ var ks = {
 
         if (ret != ks.ERR_OK) {
             MKeystone.setValue(this.handle_ptr, 0, '*');
-            var error = 'Keystone.js: Function ks_open failed with code ' + ret + ':\n' + ks.strerror(ret);
+            var error = 'Keystone.js: Function ks_open failed with code ' + ret + ':\n' + MKeystone._ks_strerror(ret);
             throw error;
         }
     },
-};
+};}
+);
