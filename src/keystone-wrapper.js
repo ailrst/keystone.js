@@ -4,7 +4,8 @@
  */
 
 // Emscripten demodularize
-var MKeystone = new MKeystone();
+
+var MKeystone = await new MKeystone();
 
 var ks = {
     version: function() {
